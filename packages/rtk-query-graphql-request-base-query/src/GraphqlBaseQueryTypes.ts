@@ -3,6 +3,7 @@ import type {
   GraphQLClient,
   RequestOptions,
   RequestDocument,
+  ClientError,
 } from 'graphql-request'
 
 export type Document = RequestDocument
@@ -12,7 +13,13 @@ export type PrepareHeaders = (
   api: Pick<BaseQueryApi, 'getState' | 'endpoint' | 'type' | 'forced' | 'extra'>
 ) => MaybePromise<Headers>
 
-export type GraphqlRequestBaseQueryArgs = (
+export type ErrorResponse = {
+  message: string
+  stack: string
+  name: string
+}
+
+export type GraphqlRequestBaseQueryArgs<E = ErrorResponse> = (
   | {
       url: string
     }
@@ -20,6 +27,7 @@ export type GraphqlRequestBaseQueryArgs = (
 ) & {
   requestHeaders?: RequestHeaders
   prepareHeaders?: PrepareHeaders
+  customErrors?: (args: ClientError) => E
 }
 
 export type QueryReturnValue<T = unknown, E = unknown, M = unknown> =

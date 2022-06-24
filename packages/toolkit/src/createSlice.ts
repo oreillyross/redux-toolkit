@@ -17,6 +17,7 @@ import { createReducer, NotFunction } from './createReducer'
 import type { ActionReducerMapBuilder } from './mapBuilders'
 import { executeReducerBuilderCallback } from './mapBuilders'
 import type { NoInfer } from './tsHelpers'
+import { freezeDraftable } from './utils'
 
 /**
  * An action creator attached to a slice.
@@ -265,7 +266,7 @@ export function createSlice<
   const initialState =
     typeof options.initialState == 'function'
       ? options.initialState
-      : createNextState(options.initialState, () => {})
+      : freezeDraftable(options.initialState)
 
   const reducers = options.reducers || {}
 
